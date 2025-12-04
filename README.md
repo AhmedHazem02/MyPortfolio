@@ -1,4 +1,4 @@
-# Interactive 3D Developer Portfolio
+# Interactive  Developer Portfolio
 
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&style=for-the-badge)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?logo=typescript&style=for-the-badge)
