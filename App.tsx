@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Hero3D from './components/Hero3D';
 import { ProjectCard } from './components/ProjectCard';
-import { PERSONAL_INFO, PROJECTS, SKILLS, EDUCATION, VOLUNTEERING, WORK_EXPERIENCE, ACHIEVEMENTS } from './constants';
+import { PERSONAL_INFO, PROJECTS, SKILLS, EDUCATION, VOLUNTEERING, WORK_EXPERIENCE, ACHIEVEMENTS, SERVICES } from './constants';
 import { Project } from './types';
 import { 
   Search, 
@@ -36,7 +36,12 @@ import {
   Server,
   Database,
   Phone,
-  MessageCircle
+  MessageCircle,
+  Zap,
+  Shield,
+  Layout,
+  Workflow,
+  Component
 } from 'lucide-react';
 
 function App() {
@@ -44,7 +49,7 @@ function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [activeSection, setActiveSection] = useState<'explorer' | 'search' | 'git' | 'extensions' | 'settings'>('explorer');
   const [searchQuery, setSearchQuery] = useState('');
-  const [openTabs, setOpenTabs] = useState<string[]>(['Profile', 'Projects', 'Experience', 'Skills']);
+  const [openTabs, setOpenTabs] = useState<string[]>(['Profile', 'Projects', 'Services', 'Experience']);
   const [expandedCategories, setExpandedCategories] = useState<string[]>(SKILLS.map(s => s.name));
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
@@ -109,6 +114,17 @@ function App() {
     // On mobile, close sidebar after selection
     if (window.innerWidth < 768) {
       setSidebarOpen(false);
+    }
+  };
+
+  const getServiceIcon = (iconName: string) => {
+    switch(iconName) {
+        case 'Server': return <Server className="text-[#38bdf8]"/>;
+        case 'Database': return <Database className="text-[#e74c3c]"/>;
+        case 'Workflow': return <Workflow className="text-[#9b59b6]"/>;
+        case 'Zap': return <Zap className="text-[#f1c40f]"/>;
+        case 'Shield': return <Shield className="text-[#2ecc71]"/>;
+        default: return <Cpu className="text-[#cccccc]"/>;
     }
   };
 
@@ -188,12 +204,13 @@ function App() {
                         <ChevronDown size={14} /> PORTFOLIO
                     </div>
                     <div className="pl-2 flex flex-col">
-                        {['Profile', 'Projects', 'Experience', 'Skills'].map(item => {
+                        {['Profile', 'Projects', 'Services', 'Experience', 'Skills'].map(item => {
                             let Icon = FileText;
                             let color = 'text-[#569cd6]'; // default ts blue
                             let ext = '.md';
                             
                             if(item === 'Projects') { Icon = Braces; color='text-[#e67e22]'; ext='.cs'; }
+                            if(item === 'Services') { Icon = Component; color='text-[#2ecc71]'; ext='.cs'; }
                             if(item === 'Experience') { Icon = GitGraph; color='text-[#f1c40f]'; ext='.git'; }
                             if(item === 'Skills') { Icon = Hash; color='text-[#e74c3c]'; ext='.json'; }
                             
@@ -229,6 +246,7 @@ function App() {
            {openTabs.map(tab => {
                let ext = '.md';
                if(tab === 'Projects') ext='.cs';
+               if(tab === 'Services') ext='.cs';
                if(tab === 'Experience') ext='.git';
                if(tab === 'Skills') ext='.json';
 
@@ -241,6 +259,7 @@ function App() {
                     <div className="flex items-center gap-1.5 truncate">
                         {tab === 'Profile' && <FileText size={14} className="text-[#569cd6] flex-shrink-0" />}
                         {tab === 'Projects' && <Braces size={14} className="text-[#e67e22] flex-shrink-0" />}
+                        {tab === 'Services' && <Component size={14} className="text-[#2ecc71] flex-shrink-0" />}
                         {tab === 'Experience' && <GitGraph size={14} className="text-[#f1c40f] flex-shrink-0" />}
                         {tab === 'Skills' && <Hash size={14} className="text-[#e74c3c] flex-shrink-0" />}
                         <span className="truncate">{tab}{ext}</span>
@@ -307,7 +326,7 @@ function App() {
                                         <p className="text-[#a1a1aa] leading-7 mb-4 max-w-2xl text-sm md:text-base">
                                             Passionate .NET Developer specialized in building robust, scalable APIs and backend systems.
                                             Currently working as a Back-End Developer at Xfuse, and previously led backend initiatives at Sohag University's Smart Team.
-                                            Expert in <span className="text-[#dcdcaa]">Clean Architecture</span> and <span className="text-[#ce9178]">SQL Optimization</span>.
+                                            Expert in <span className="text-[#dcdcaa]">Clean Architecture</span>, <span className="text-[#ce9178]">SQL Optimization</span>, and <span className="text-[#569cd6]">Problem Solving</span>.
                                         </p>
 
                                         {/* Contact Info Row */}
@@ -383,6 +402,48 @@ function App() {
                                     ))}
                                 </div>
                             )}
+                        </div>
+                    )}
+
+                    {/* SERVICES TAB */}
+                    {activeTab === 'Services' && (
+                        <div className="max-w-6xl mx-auto pb-8">
+                            <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+                                <Component className="text-[#2ecc71]" /> Services & Capabilities
+                            </h2>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {SERVICES.map((service, index) => (
+                                    <motion.div 
+                                        key={index}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ delay: index * 0.1 }}
+                                        className="bg-[#1e1e1e] border border-[#333333] rounded-lg p-6 hover:border-[#007acc] hover:shadow-lg transition-all group"
+                                    >
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="p-3 bg-[#252526] rounded-md border border-[#333333] group-hover:bg-[#2d2d2d] transition-colors">
+                                                {getServiceIcon(service.icon)}
+                                            </div>
+                                            <h3 className="text-lg font-bold text-[#cccccc] group-hover:text-white transition-colors">{service.title}</h3>
+                                        </div>
+                                        
+                                        <p className="text-[#858585] text-sm leading-6 mb-6 h-12">
+                                            {service.description}
+                                        </p>
+                                        
+                                        <div className="space-y-2">
+                                            <div className="text-xs font-mono text-[#007acc] font-bold uppercase tracking-wider mb-2">Interface Members</div>
+                                            {service.features.map((feature, i) => (
+                                                <div key={i} className="flex items-center gap-2 text-sm text-[#d4d4d4] font-mono">
+                                                    <span className="text-[#569cd6] text-xs">public</span> {feature}<span className="text-[#d4d4d4]">( );</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
                         </div>
                     )}
 
