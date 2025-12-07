@@ -6,7 +6,7 @@ import {
   GitBranch, Database, Layout, Terminal, Play, Eye, Code2, ExternalLink, 
   LayoutTemplate, Server, Cpu, Globe, Hexagon, Layers, Workflow, Shield, 
   Zap, Braces, FileCode, Box, Filter, Lock, Network, Palette, Component,
-  Maximize2, CreditCard
+  Maximize2, CreditCard, MessageCircle, Flame, Cloud
 } from 'lucide-react';
 
 interface Props {
@@ -42,26 +42,31 @@ export const ProjectCard: React.FC<Props> = ({ project, onClick }) => {
     if (t.includes('entity') || t.includes('ef')) return <Database className="w-3 h-3 text-[#68217a]" />; // Purple
     if (t.includes('redis')) return <Zap className="w-3 h-3 text-[#dc382d]" />; // Red
     if (t.includes('react')) return <Cpu className="w-3 h-3 text-[#61dbfb]" />; // Cyan
+    if (t.includes('firebase') || t.includes('firestore')) return <Flame className="w-3 h-3 text-[#f39c12]" />; // Orange/Flame
+    if (t.includes('net core') || t.includes('web api') || t.includes('.net')) return <Globe className="w-3 h-3 text-[#512bd4]" />; // .NET Purple
     
     // Concepts / Patterns
     if (t.includes('oop')) return <Box className="w-3 h-3 text-[#e67e22]" />; // Orange
-    if (t.includes('design pattern')) return <Workflow className="w-3 h-3 text-[#2ecc71]" />; // Green
-    if (t.includes('clean architecture') || t.includes('clean')) return <Layers className="w-3 h-3 text-[#3498db]" />; // Blue
+    if (t.includes('design pattern') || t.includes('clean')) return <Layers className="w-3 h-3 text-[#2ecc71]" />; // Green
     if (t.includes('cqrs')) return <Workflow className="w-3 h-3 text-[#9b59b6]" />;
     if (t.includes('mvc')) return <LayoutTemplate className="w-3 h-3 text-[#e67e22]" />;
     if (t.includes('repo')) return <Component className="w-3 h-3 text-[#95a5a6]" />;
+    if (t.includes('automapper')) return <Workflow className="w-3 h-3 text-[#e67e22]" />;
     
     // Data & Networking
-    if (t.includes('sql') || t.includes('mssql')) return <Database className="w-3 h-3 text-[#e74c3c]" />; // Red
+    if (t.includes('sql') || t.includes('mssql') || t.includes('airtable')) return <Database className="w-3 h-3 text-[#e74c3c]" />; // Red
     if (t.includes('linq')) return <Filter className="w-3 h-3 text-[#27ae60]" />; // Green
     if (t.includes('api') || t.includes('webhook')) return <Globe className="w-3 h-3 text-[#3498db]" />; // Blue
     if (t.includes('jwt') || t.includes('token') || t.includes('auth') || t.includes('identity') || t.includes('security')) return <Lock className="w-3 h-3 text-[#f1c40f]" />; // Yellow
-    if (t.includes('payment')) return <CreditCard className="w-3 h-3 text-[#2ecc71]" />; // Green
-    if (t.includes('networking') || t.includes('distributed')) return <Network className="w-3 h-3 text-[#34495e]" />;
+    if (t.includes('payment') || t.includes('kashier')) return <CreditCard className="w-3 h-3 text-[#2ecc71]" />; // Green
+    if (t.includes('networking') || t.includes('distributed') || t.includes('cloudinary')) return <Network className="w-3 h-3 text-[#34495e]" />;
     if (t.includes('git')) return <GitBranch className="w-3 h-3 text-[#f1502f]" />;
     if (t.includes('injection') || t.includes('dependency')) return <Hexagon className="w-3 h-3 text-[#1abc9c]" />;
-    
-    // Default
+    if (t.includes('whatsapp')) return <MessageCircle className="w-3 h-3 text-[#25D366]" />; // WhatsApp Green
+    if (t.includes('vercel')) return <Cloud className="w-3 h-3 text-[#ffffff]" />; // Vercel White/Black
+    if (t.includes('inventory')) return <Box className="w-3 h-3 text-[#d35400]" />;
+
+    // Fallback
     return <Terminal className="w-3 h-3 text-[#7f8c8d]" />;
   };
 
@@ -69,94 +74,94 @@ export const ProjectCard: React.FC<Props> = ({ project, onClick }) => {
   const getCodeLines = () => {
     if (project.type === 'API' || project.type === 'System') {
       return [
-        <span><span className="text-[#c586c0]">using</span> <span className="text-[#d4d4d4]">Microsoft.AspNetCore.Mvc;</span></span>,
-        <span><span className="text-[#c586c0]">using</span> <span className="text-[#d4d4d4]">System.Threading.Tasks;</span></span>,
-        <span></span>,
-        <span><span className="text-[#569cd6]">namespace</span> <span className="text-[#d4d4d4]">Portfolio.Controllers</span></span>,
-        <span className="text-[#d4d4d4]">{'{'}</span>,
-        <span>    <span className="text-[#d4d4d4]">[</span><span className="text-[#4ec9b0]">ApiController</span><span className="text-[#d4d4d4]">]</span></span>,
-        <span>    <span className="text-[#d4d4d4]">[</span><span className="text-[#4ec9b0]">Route</span><span className="text-[#d4d4d4]">(</span><span className="text-[#ce9178]">"api/[controller]"</span><span className="text-[#d4d4d4]">)]</span></span>,
-        <span>    <span className="text-[#569cd6]">public class</span> <span className="text-[#4ec9b0]">ProjectsController</span> <span className="text-[#d4d4d4]">:</span> <span className="text-[#4ec9b0]">ControllerBase</span></span>,
-        <span className="text-[#d4d4d4]">    {'{'}</span>,
-        <span>        <span className="text-[#6a9955]">/// &lt;summary&gt;</span></span>,
-        <span>        <span className="text-[#6a9955]">/// Retrieves details for {project.title}</span></span>,
-        <span>        <span className="text-[#6a9955]">/// &lt;/summary&gt;</span></span>,
-        <span>        <span className="text-[#d4d4d4]">[</span><span className="text-[#4ec9b0]">HttpGet</span><span className="text-[#d4d4d4]">(</span><span className="text-[#ce9178]">"{project.title.toLowerCase().replace(/\s/g, '-').substring(0, 15)}"</span><span className="text-[#d4d4d4]">)]</span></span>,
-        <span>        <span className="text-[#569cd6]">public async</span> <span className="text-[#4ec9b0]">Task</span><span className="text-[#d4d4d4]">&lt;</span><span className="text-[#4ec9b0]">IActionResult</span><span className="text-[#d4d4d4]">&gt;</span> <span className="text-[#dcdcaa]">GetProject</span><span className="text-[#d4d4d4]">(</span><span className="text-[#569cd6]">int</span> <span className="text-[#9cdcfe]">id</span><span className="text-[#d4d4d4]">)</span></span>,
-        <span className="text-[#d4d4d4]">        {'{'}</span>,
-        <span>            <span className="text-[#c586c0]">try</span></span>,
-        <span className="text-[#d4d4d4]">            {'{'}</span>,
-        <span>                <span className="text-[#569cd6]">var</span> <span className="text-[#9cdcfe]">result</span> <span className="text-[#d4d4d4]">=</span> <span className="text-[#c586c0]">await</span> <span className="text-[#9cdcfe]">_service</span><span className="text-[#d4d4d4]">.</span><span className="text-[#dcdcaa]">GetByIdAsync</span><span className="text-[#d4d4d4]">(</span><span className="text-[#9cdcfe]">id</span><span className="text-[#d4d4d4]">);</span></span>,
-        <span>                <span className="text-[#c586c0]">if</span> <span className="text-[#d4d4d4]">(</span><span className="text-[#9cdcfe]">result</span> <span className="text-[#d4d4d4]">==</span> <span className="text-[#569cd6]">null</span><span className="text-[#d4d4d4]">)</span> <span className="text-[#c586c0]">return</span> <span className="text-[#dcdcaa]">NotFound</span><span className="text-[#d4d4d4]">();</span></span>,
-        <span></span>,
-        <span>                <span className="text-[#c586c0]">return</span> <span className="text-[#dcdcaa]">Ok</span><span className="text-[#d4d4d4]">(</span><span className="text-[#569cd6]">new</span> <span className="text-[#d4d4d4]">{'{'}</span></span>,
-        <span>                    <span className="text-[#9cdcfe]">Id</span> <span className="text-[#d4d4d4]">=</span> <span className="text-[#9cdcfe]">result</span><span className="text-[#d4d4d4]">.</span><span className="text-[#9cdcfe]">Id</span><span className="text-[#d4d4d4]">,</span></span>,
-        <span>                    <span className="text-[#9cdcfe]">Name</span> <span className="text-[#d4d4d4]">=</span> <span className="text-[#ce9178]">"{project.title.substring(0,10)}..."</span><span className="text-[#d4d4d4]">,</span></span>,
-        <span>                    <span className="text-[#9cdcfe]">Stack</span> <span className="text-[#d4d4d4]">=</span> <span className="text-[#569cd6]">new</span><span className="text-[#d4d4d4]">[] {'{'}</span> <span className="text-[#ce9178]">"{project.techStack[0]}"</span><span className="text-[#d4d4d4]">... {'}'}</span></span>,
-        <span className="text-[#d4d4d4]">                {'}'});</span>,
-        <span className="text-[#d4d4d4]">            {'}'}</span>,
-        <span>            <span className="text-[#c586c0]">catch</span> <span className="text-[#d4d4d4]">(</span><span className="text-[#4ec9b0]">Exception</span> <span className="text-[#9cdcfe]">ex</span><span className="text-[#d4d4d4]">)</span></span>,
-        <span className="text-[#d4d4d4]">            {'{'}</span>,
-        <span>                <span className="text-[#9cdcfe]">_logger</span><span className="text-[#d4d4d4]">.</span><span className="text-[#dcdcaa]">LogError</span><span className="text-[#d4d4d4]">(</span><span className="text-[#9cdcfe]">ex</span><span className="text-[#d4d4d4]">,</span> <span className="text-[#ce9178]">"Error fetching project"</span><span className="text-[#d4d4d4]">);</span></span>,
-        <span>                <span className="text-[#c586c0]">return</span> <span className="text-[#dcdcaa]">StatusCode</span><span className="text-[#d4d4d4]">(</span><span className="text-[#b5cea8]">500</span><span className="text-[#d4d4d4]">,</span> <span className="text-[#9cdcfe]">ex</span><span className="text-[#d4d4d4]">.</span><span className="text-[#9cdcfe]">Message</span><span className="text-[#d4d4d4]">);</span></span>,
-        <span className="text-[#d4d4d4]">            {'}'}</span>,
-        <span className="text-[#d4d4d4]">        {'}'}</span>,
-        <span className="text-[#d4d4d4]">    {'}'}</span>,
-        <span className="text-[#d4d4d4]">{'}'}</span>
+        <span key="1"><span className="text-[#c586c0]">using</span> <span className="text-[#d4d4d4]">Microsoft.AspNetCore.Mvc;</span></span>,
+        <span key="2"><span className="text-[#c586c0]">using</span> <span className="text-[#d4d4d4]">System.Threading.Tasks;</span></span>,
+        <span key="3"> </span>,
+        <span key="4"><span className="text-[#569cd6]">namespace</span> <span className="text-[#d4d4d4]">Portfolio.Controllers</span></span>,
+        <span key="5" className="text-[#d4d4d4]">{'{'}</span>,
+        <span key="6">    <span className="text-[#d4d4d4]">[</span><span className="text-[#4ec9b0]">ApiController</span><span className="text-[#d4d4d4]">]</span></span>,
+        <span key="7">    <span className="text-[#d4d4d4]">[</span><span className="text-[#4ec9b0]">Route</span><span className="text-[#d4d4d4]">(</span><span className="text-[#ce9178]">"api/[controller]"</span><span className="text-[#d4d4d4]">)]</span></span>,
+        <span key="8">    <span className="text-[#569cd6]">public class</span> <span className="text-[#4ec9b0]">ProjectsController</span> <span className="text-[#d4d4d4]">:</span> <span className="text-[#4ec9b0]">ControllerBase</span></span>,
+        <span key="9" className="text-[#d4d4d4]">    {'{'}</span>,
+        <span key="10">        <span className="text-[#6a9955]">/// &lt;summary&gt;</span></span>,
+        <span key="11">        <span className="text-[#6a9955]">/// Retrieves details for {project.title}</span></span>,
+        <span key="12">        <span className="text-[#6a9955]">/// &lt;/summary&gt;</span></span>,
+        <span key="13">        <span className="text-[#d4d4d4]">[</span><span className="text-[#4ec9b0]">HttpGet</span><span className="text-[#d4d4d4]">(</span><span className="text-[#ce9178]">"{project.title.toLowerCase().replace(/\s/g, '-').substring(0, 15)}"</span><span className="text-[#d4d4d4]">)]</span></span>,
+        <span key="14">        <span className="text-[#569cd6]">public async</span> <span className="text-[#4ec9b0]">Task</span><span className="text-[#d4d4d4]">&lt;</span><span className="text-[#4ec9b0]">IActionResult</span><span className="text-[#d4d4d4]">&gt;</span> <span className="text-[#dcdcaa]">GetProject</span><span className="text-[#d4d4d4]">(</span><span className="text-[#569cd6]">int</span> <span className="text-[#9cdcfe]">id</span><span className="text-[#d4d4d4]">)</span></span>,
+        <span key="15" className="text-[#d4d4d4]">        {'{'}</span>,
+        <span key="16">            <span className="text-[#c586c0]">try</span></span>,
+        <span key="17" className="text-[#d4d4d4]">            {'{'}</span>,
+        <span key="18">                <span className="text-[#569cd6]">var</span> <span className="text-[#9cdcfe]">result</span> <span className="text-[#d4d4d4]">=</span> <span className="text-[#c586c0]">await</span> <span className="text-[#9cdcfe]">_service</span><span className="text-[#d4d4d4]">.</span><span className="text-[#dcdcaa]">GetByIdAsync</span><span className="text-[#d4d4d4]">(</span><span className="text-[#9cdcfe]">id</span><span className="text-[#d4d4d4]">);</span></span>,
+        <span key="19">                <span className="text-[#c586c0]">if</span> <span className="text-[#d4d4d4]">(</span><span className="text-[#9cdcfe]">result</span> <span className="text-[#d4d4d4]">==</span> <span className="text-[#569cd6]">null</span><span className="text-[#d4d4d4]">)</span> <span className="text-[#c586c0]">return</span> <span className="text-[#dcdcaa]">NotFound</span><span className="text-[#d4d4d4]">();</span></span>,
+        <span key="20"> </span>,
+        <span key="21">                <span className="text-[#c586c0]">return</span> <span className="text-[#dcdcaa]">Ok</span><span className="text-[#d4d4d4]">(</span><span className="text-[#569cd6]">new</span> <span className="text-[#d4d4d4]">{'{'}</span></span>,
+        <span key="22">                    <span className="text-[#9cdcfe]">Id</span> <span className="text-[#d4d4d4]">=</span> <span className="text-[#9cdcfe]">result</span><span className="text-[#d4d4d4]">.</span><span className="text-[#9cdcfe]">Id</span><span className="text-[#d4d4d4]">,</span></span>,
+        <span key="23">                    <span className="text-[#9cdcfe]">Name</span> <span className="text-[#d4d4d4]">=</span> <span className="text-[#ce9178]">"{project.title.substring(0,10)}..."</span><span className="text-[#d4d4d4]">,</span></span>,
+        <span key="24">                    <span className="text-[#9cdcfe]">Stack</span> <span className="text-[#d4d4d4]">=</span> <span className="text-[#569cd6]">new</span><span className="text-[#d4d4d4]">[] {'{'}</span> <span className="text-[#ce9178]">"{project.techStack[0]}"</span><span className="text-[#d4d4d4]">... {'}'}</span></span>,
+        <span key="25" className="text-[#d4d4d4]">                {'}'});</span>,
+        <span key="26" className="text-[#d4d4d4]">            {'}'}</span>,
+        <span key="27">            <span className="text-[#c586c0]">catch</span> <span className="text-[#d4d4d4]">(</span><span className="text-[#4ec9b0]">Exception</span> <span className="text-[#9cdcfe]">ex</span><span className="text-[#d4d4d4]">)</span></span>,
+        <span key="28" className="text-[#d4d4d4]">            {'{'}</span>,
+        <span key="29">                <span className="text-[#9cdcfe]">_logger</span><span className="text-[#d4d4d4]">.</span><span className="text-[#dcdcaa]">LogError</span><span className="text-[#d4d4d4]">(</span><span className="text-[#9cdcfe]">ex</span><span className="text-[#d4d4d4]">,</span> <span className="text-[#ce9178]">"Error fetching project"</span><span className="text-[#d4d4d4]">);</span></span>,
+        <span key="30">                <span className="text-[#c586c0]">return</span> <span className="text-[#dcdcaa]">StatusCode</span><span className="text-[#d4d4d4]">(</span><span className="text-[#b5cea8]">500</span><span className="text-[#d4d4d4]">,</span> <span className="text-[#9cdcfe]">ex</span><span className="text-[#d4d4d4]">.</span><span className="text-[#9cdcfe]">Message</span><span className="text-[#d4d4d4]">);</span></span>,
+        <span key="31" className="text-[#d4d4d4]">            {'}'}</span>,
+        <span key="32" className="text-[#d4d4d4]">        {'}'}</span>,
+        <span key="33" className="text-[#d4d4d4]">    {'}'}</span>,
+        <span key="34" className="text-[#d4d4d4]">{'}'}</span>
       ];
     } 
     
     if (project.type === 'MVC') {
         return [
-            <span><span className="text-[#c586c0]">using</span> <span className="text-[#d4d4d4]">Microsoft.AspNetCore.Mvc;</span></span>,
-            <span><span className="text-[#c586c0]">using</span> <span className="text-[#d4d4d4]">Portfolio.Models;</span></span>,
-            <span></span>,
-            <span><span className="text-[#569cd6]">namespace</span> <span className="text-[#d4d4d4]">Portfolio.Controllers</span></span>,
-            <span className="text-[#d4d4d4]">{'{'}</span>,
-            <span>    <span className="text-[#569cd6]">public class</span> <span className="text-[#4ec9b0]">HomeController</span> <span className="text-[#d4d4d4]">:</span> <span className="text-[#4ec9b0]">Controller</span></span>,
-            <span className="text-[#d4d4d4]">    {'{'}</span>,
-            <span>        <span className="text-[#6a9955]">/// &lt;summary&gt;</span></span>,
-            <span>        <span className="text-[#6a9955]">/// Controller logic for {project.title} View</span></span>,
-            <span>        <span className="text-[#6a9955]">/// &lt;/summary&gt;</span></span>,
-            <span>        <span className="text-[#569cd6]">private readonly</span> <span className="text-[#4ec9b0]">ILogger</span><span className="text-[#d4d4d4]">&lt;</span><span className="text-[#4ec9b0]">HomeController</span><span className="text-[#d4d4d4]">&gt;</span> <span className="text-[#9cdcfe]">_logger</span><span className="text-[#d4d4d4]">;</span></span>,
-            <span></span>,
-            <span>        <span className="text-[#569cd6]">public</span> <span className="text-[#4ec9b0]">IActionResult</span> <span className="text-[#dcdcaa]">Index</span><span className="text-[#d4d4d4]">()</span></span>,
-            <span className="text-[#d4d4d4]">        {'{'}</span>,
-            <span>            <span className="text-[#569cd6]">var</span> <span className="text-[#9cdcfe]">model</span> <span className="text-[#d4d4d4]">=</span> <span className="text-[#569cd6]">new</span> <span className="text-[#4ec9b0]">ProjectViewModel</span></span>,
-            <span className="text-[#d4d4d4]">            {'{'}</span>,
-            <span>                <span className="text-[#9cdcfe]">Title</span> <span className="text-[#d4d4d4]">=</span> <span className="text-[#ce9178]">"{project.title.substring(0,10)}..."</span><span className="text-[#d4d4d4]">,</span></span>,
-            <span>                <span className="text-[#9cdcfe]">IsActive</span> <span className="text-[#d4d4d4]">=</span> <span className="text-[#569cd6]">true</span><span className="text-[#d4d4d4]">,</span></span>,
-            <span>                <span className="text-[#9cdcfe]">UpdatedAt</span> <span className="text-[#d4d4d4]">=</span> <span className="text-[#4ec9b0]">DateTime</span><span className="text-[#d4d4d4]">.</span><span className="text-[#9cdcfe]">UtcNow</span></span>,
-            <span className="text-[#d4d4d4]">            {'};'}</span>,
-            <span>            <span className="text-[#c586c0]">return</span> <span className="text-[#dcdcaa]">View</span><span className="text-[#d4d4d4]">(</span><span className="text-[#9cdcfe]">model</span><span className="text-[#d4d4d4]">);</span></span>,
-            <span className="text-[#d4d4d4]">        {'}'}</span>,
-            <span className="text-[#d4d4d4]">    {'}'}</span>,
-            <span className="text-[#d4d4d4]">{'}'}</span>
+            <span key="1"><span className="text-[#c586c0]">using</span> <span className="text-[#d4d4d4]">Microsoft.AspNetCore.Mvc;</span></span>,
+            <span key="2"><span className="text-[#c586c0]">using</span> <span className="text-[#d4d4d4]">Portfolio.Models;</span></span>,
+            <span key="3"> </span>,
+            <span key="4"><span className="text-[#569cd6]">namespace</span> <span className="text-[#d4d4d4]">Portfolio.Controllers</span></span>,
+            <span key="5" className="text-[#d4d4d4]">{'{'}</span>,
+            <span key="6">    <span className="text-[#569cd6]">public class</span> <span className="text-[#4ec9b0]">HomeController</span> <span className="text-[#d4d4d4]">:</span> <span className="text-[#4ec9b0]">Controller</span></span>,
+            <span key="7" className="text-[#d4d4d4]">    {'{'}</span>,
+            <span key="8">        <span className="text-[#6a9955]">/// &lt;summary&gt;</span></span>,
+            <span key="9">        <span className="text-[#6a9955]">/// Controller logic for {project.title} View</span></span>,
+            <span key="10">        <span className="text-[#6a9955]">/// &lt;/summary&gt;</span></span>,
+            <span key="11">        <span className="text-[#569cd6]">private readonly</span> <span className="text-[#4ec9b0]">ILogger</span><span className="text-[#d4d4d4]">&lt;</span><span className="text-[#4ec9b0]">HomeController</span><span className="text-[#d4d4d4]">&gt;</span> <span className="text-[#9cdcfe]">_logger</span><span className="text-[#d4d4d4]">;</span></span>,
+            <span key="12"> </span>,
+            <span key="13">        <span className="text-[#569cd6]">public</span> <span className="text-[#4ec9b0]">IActionResult</span> <span className="text-[#dcdcaa]">Index</span><span className="text-[#d4d4d4]">()</span></span>,
+            <span key="14" className="text-[#d4d4d4]">        {'{'}</span>,
+            <span key="15">            <span className="text-[#569cd6]">var</span> <span className="text-[#9cdcfe]">model</span> <span className="text-[#d4d4d4]">=</span> <span className="text-[#569cd6]">new</span> <span className="text-[#4ec9b0]">ProjectViewModel</span></span>,
+            <span key="16" className="text-[#d4d4d4]">            {'{'}</span>,
+            <span key="17">                <span className="text-[#9cdcfe]">Title</span> <span className="text-[#d4d4d4]">=</span> <span className="text-[#ce9178]">"{project.title.substring(0,10)}..."</span><span className="text-[#d4d4d4]">,</span></span>,
+            <span key="18">                <span className="text-[#9cdcfe]">IsActive</span> <span className="text-[#d4d4d4]">=</span> <span className="text-[#569cd6]">true</span><span className="text-[#d4d4d4]">,</span></span>,
+            <span key="19">                <span className="text-[#9cdcfe]">UpdatedAt</span> <span className="text-[#d4d4d4]">=</span> <span className="text-[#4ec9b0]">DateTime</span><span className="text-[#d4d4d4]">.</span><span className="text-[#9cdcfe]">UtcNow</span></span>,
+            <span key="20" className="text-[#d4d4d4]">            {'};'}</span>,
+            <span key="21">            <span className="text-[#c586c0]">return</span> <span className="text-[#dcdcaa]">View</span><span className="text-[#d4d4d4]">(</span><span className="text-[#9cdcfe]">model</span><span className="text-[#d4d4d4]">);</span></span>,
+            <span key="22" className="text-[#d4d4d4]">        {'}'}</span>,
+            <span key="23" className="text-[#d4d4d4]">    {'}'}</span>,
+            <span key="24" className="text-[#d4d4d4]">{'}'}</span>
         ];
     }
 
     // Default / Console
     return [
-        <span><span className="text-[#c586c0]">using</span> <span className="text-[#d4d4d4]">System;</span></span>,
-        <span><span className="text-[#c586c0]">using</span> <span className="text-[#d4d4d4]">System.Collections.Generic;</span></span>,
-        <span></span>,
-        <span><span className="text-[#569cd6]">namespace</span> <span className="text-[#d4d4d4]">Portfolio.ConsoleApp</span></span>,
-        <span className="text-[#d4d4d4]">{'{'}</span>,
-        <span>    <span className="text-[#6a9955]">/// &lt;summary&gt;</span></span>,
-        <span>    <span className="text-[#6a9955]">/// Main entry point for {project.title}</span></span>,
-        <span>    <span className="text-[#6a9955]">/// &lt;/summary&gt;</span></span>,
-        <span>    <span className="text-[#569cd6]">internal class</span> <span className="text-[#4ec9b0]">Program</span></span>,
-        <span className="text-[#d4d4d4]">    {'{'}</span>,
-        <span>        <span className="text-[#569cd6]">static void</span> <span className="text-[#dcdcaa]">Main</span><span className="text-[#d4d4d4]">(</span><span className="text-[#569cd6]">string</span><span className="text-[#d4d4d4]">[]</span> <span className="text-[#9cdcfe]">args</span><span className="text-[#d4d4d4]">)</span></span>,
-        <span className="text-[#d4d4d4]">        {'{'}</span>,
-        <span>            <span className="text-[#4ec9b0]">Console</span><span className="text-[#d4d4d4]">.</span><span className="text-[#dcdcaa]">WriteLine</span><span className="text-[#d4d4d4]">(</span><span className="text-[#ce9178]">"Initializing System..."</span><span className="text-[#d4d4d4]">);</span></span>,
-        <span>            <span className="text-[#6a9955]">/* {project.description.substring(0, 30)}... */</span></span>,
-        <span>            <span className="text-[#569cd6]">var</span> <span className="text-[#9cdcfe]">app</span> <span className="text-[#d4d4d4]">=</span> <span className="text-[#569cd6]">new</span> <span className="text-[#4ec9b0]">{project.title.replace(/[^a-zA-Z]/g,'')}App</span><span className="text-[#d4d4d4]">();</span></span>,
-        <span>            <span className="text-[#9cdcfe]">app</span><span className="text-[#d4d4d4]">.</span><span className="text-[#dcdcaa]">Run</span><span className="text-[#d4d4d4]">(</span><span className="text-[#9cdcfe]">args</span><span className="text-[#d4d4d4]">);</span></span>,
-        <span>            <span className="text-[#4ec9b0]">Console</span><span className="text-[#d4d4d4]">.</span><span className="text-[#dcdcaa]">ReadKey</span><span className="text-[#d4d4d4]">();</span></span>,
-        <span className="text-[#d4d4d4]">        {'}'}</span>,
-        <span className="text-[#d4d4d4]">    {'}'}</span>,
-        <span className="text-[#d4d4d4]">{'}'}</span>
+        <span key="1"><span className="text-[#c586c0]">using</span> <span className="text-[#d4d4d4]">System;</span></span>,
+        <span key="2"><span className="text-[#c586c0]">using</span> <span className="text-[#d4d4d4]">System.Collections.Generic;</span></span>,
+        <span key="3"> </span>,
+        <span key="4"><span className="text-[#569cd6]">namespace</span> <span className="text-[#d4d4d4]">Portfolio.ConsoleApp</span></span>,
+        <span key="5" className="text-[#d4d4d4]">{'{'}</span>,
+        <span key="6">    <span className="text-[#6a9955]">/// &lt;summary&gt;</span></span>,
+        <span key="7">    <span className="text-[#6a9955]">/// Main entry point for {project.title}</span></span>,
+        <span key="8">    <span className="text-[#6a9955]">/// &lt;/summary&gt;</span></span>,
+        <span key="9">    <span className="text-[#569cd6]">internal class</span> <span className="text-[#4ec9b0]">Program</span></span>,
+        <span key="10" className="text-[#d4d4d4]">    {'{'}</span>,
+        <span key="11">        <span className="text-[#569cd6]">static void</span> <span className="text-[#dcdcaa]">Main</span><span className="text-[#d4d4d4]">(</span><span className="text-[#569cd6]">string</span><span className="text-[#d4d4d4]">[]</span> <span className="text-[#9cdcfe]">args</span><span className="text-[#d4d4d4]">)</span></span>,
+        <span key="12" className="text-[#d4d4d4]">        {'{'}</span>,
+        <span key="13">            <span className="text-[#4ec9b0]">Console</span><span className="text-[#d4d4d4]">.</span><span className="text-[#dcdcaa]">WriteLine</span><span className="text-[#d4d4d4]">(</span><span className="text-[#ce9178]">"Initializing System..."</span><span className="text-[#d4d4d4]">);</span></span>,
+        <span key="14">            <span className="text-[#6a9955]">/* {project.description.substring(0, 30)}... */</span></span>,
+        <span key="15">            <span className="text-[#569cd6]">var</span> <span className="text-[#9cdcfe]">app</span> <span className="text-[#d4d4d4]">=</span> <span className="text-[#569cd6]">new</span> <span className="text-[#4ec9b0]">{project.title.replace(/[^a-zA-Z]/g,'')}App</span><span className="text-[#d4d4d4]">();</span></span>,
+        <span key="16">            <span className="text-[#9cdcfe]">app</span><span className="text-[#d4d4d4]">.</span><span className="text-[#dcdcaa]">Run</span><span className="text-[#d4d4d4]">(</span><span className="text-[#9cdcfe]">args</span><span className="text-[#d4d4d4]">);</span></span>,
+        <span key="17">            <span className="text-[#4ec9b0]">Console</span><span className="text-[#d4d4d4]">.</span><span className="text-[#dcdcaa]">ReadKey</span><span className="text-[#d4d4d4]">();</span></span>,
+        <span key="18" className="text-[#d4d4d4]">        {'}'}</span>,
+        <span key="19" className="text-[#d4d4d4]">    {'}'}</span>,
+        <span key="20" className="text-[#d4d4d4]">{'}'}</span>
     ];
   };
 
@@ -338,20 +343,30 @@ export const ProjectCard: React.FC<Props> = ({ project, onClick }) => {
         {viewMode === 'code' && (
             <motion.div 
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                className="flex flex-col h-full font-mono text-[13px] leading-6 bg-[#1e1e1e] overflow-auto custom-scrollbar"
+                className="flex flex-col h-full font-mono text-[13px] leading-6 bg-[#1e1e1e] overflow-auto custom-scrollbar subpixel-antialiased"
             >
-                {codeLines.map((line, i) => (
-                    <div key={i} className="flex min-w-max hover:bg-[#2a2d2e] group/line">
-                        {/* Line Number */}
-                        <div className="w-10 text-right pr-3 text-[#858585] opacity-50 select-none shrink-0 border-r border-[#333333]/30 bg-[#1e1e1e] sticky left-0 z-10 group-hover/line:text-[#cccccc] group-hover/line:opacity-100 transition-colors">
-                            {i + 1}
+                {codeLines.map((line, i) => {
+                    // Logic for alternating backgrounds and gutter synchronization
+                    const isEven = i % 2 === 0;
+                    const rowBg = isEven ? 'bg-[#1e1e1e]' : 'bg-[#222225]'; // Subtle zebra striping
+                    const gutterBg = isEven ? 'bg-[#1e1e1e]' : 'bg-[#222225]';
+                    
+                    return (
+                        <div key={i} className={`relative flex min-w-max group/line transition-colors duration-75 hover:bg-[#2a2d2e] ${rowBg}`}>
+                            {/* Active Line Marker (VS Code style) */}
+                            <div className="absolute left-0 w-[2px] h-full bg-[#007acc] opacity-0 group-hover/line:opacity-100 transition-opacity z-20 pointer-events-none"></div>
+
+                            {/* Line Number */}
+                            <div className={`w-10 text-right pr-3 text-[#6e7681] select-none shrink-0 border-r border-[#333333]/30 sticky left-0 z-10 transition-colors text-[11px] pt-[2px] group-hover/line:text-[#cccccc] group-hover/line:bg-[#2a2d2e] ${gutterBg}`}>
+                                {i + 1}
+                            </div>
+                            {/* Code Line */}
+                            <div className="pl-4 whitespace-pre text-[#d4d4d4] font-normal font-mono">
+                                {line}
+                            </div>
                         </div>
-                        {/* Code Line */}
-                        <div className="pl-3 whitespace-pre text-[#d4d4d4]">
-                            {line}
-                        </div>
-                    </div>
-                ))}
+                    );
+                })}
             </motion.div>
         )}
       </div>
