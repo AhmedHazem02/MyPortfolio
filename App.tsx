@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Hero3D from './components/Hero3D';
 import { ProjectCard } from './components/ProjectCard';
-import { PERSONAL_INFO, PROJECTS, SKILLS, EDUCATION, VOLUNTEERING, WORK_EXPERIENCE, ACHIEVEMENTS, SERVICES } from './constants';
+import { PERSONAL_INFO, PROJECTS, SKILLS, EDUCATION, VOLUNTEERING, WORK_EXPERIENCE, ACHIEVEMENTS, SERVICES, CERTIFICATIONS, LANGUAGES } from './constants';
 import { Project } from './types';
 import { 
   Search, 
@@ -41,7 +41,8 @@ import {
   Shield,
   Layout,
   Workflow,
-  Component
+  Component,
+  BookOpen
 } from 'lucide-react';
 
 function App() {
@@ -49,7 +50,7 @@ function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [activeSection, setActiveSection] = useState<'explorer' | 'search' | 'git' | 'extensions' | 'settings'>('explorer');
   const [searchQuery, setSearchQuery] = useState('');
-  const [openTabs, setOpenTabs] = useState<string[]>(['Profile', 'Projects', 'Services', 'Experience']);
+  const [openTabs, setOpenTabs] = useState<string[]>(['Profile', 'Projects', 'Expertise', 'Experience']);
   const [expandedCategories, setExpandedCategories] = useState<string[]>(SKILLS.map(s => s.name));
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
@@ -60,8 +61,9 @@ function App() {
     }
   }, []);
 
-  // Merge and sort experience
-  const sortedExperience = [...WORK_EXPERIENCE, ...VOLUNTEERING, ...EDUCATION, ...ACHIEVEMENTS].sort((a, b) => {
+  // Merge and sort experience for Git Graph (Visual Timeline)
+  // Note: This is for the interactive timeline. The Resume.md tab follows strict ATS order.
+  const sortedExperience = [...WORK_EXPERIENCE, ...VOLUNTEERING, ...EDUCATION, ...CERTIFICATIONS, ...ACHIEVEMENTS].sort((a, b) => {
     const getYear = (period: string) => {
       // Extract year from "Month YYYY" or "YYYY"
       const match = period.match(/\d{4}/);
@@ -76,8 +78,13 @@ function App() {
     p.techStack.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
+  // Split projects into Commercial/Enterprise and Academic/Console
+  // HR NOTE: Only showing Commercial Projects to maintain Senior/Mid-Level Professionalism
+  const commercialProjects = filteredProjects.filter(p => p.type !== 'Console');
+  // const academicProjects = filteredProjects.filter(p => p.type === 'Console'); 
+
   const handleDownloadCV = () => {
-    window.open("https://drive.google.com/file/d/17BI99vV1DuCXe9KdSI8SM5AzE5Hfueeq/view?usp=sharing", "_blank");
+    window.open("https://drive.google.com/file/d/1ySH3c38oqPVEulByAy5zqK5sFKqfQ9lR/view?usp=sharing", "_blank");
   };
 
   const handleContact = () => {
@@ -204,13 +211,13 @@ function App() {
                         <ChevronDown size={14} /> PORTFOLIO
                     </div>
                     <div className="pl-2 flex flex-col">
-                        {['Profile', 'Projects', 'Services', 'Experience', 'Skills'].map(item => {
+                        {['Profile', 'Resume', 'Projects', 'Expertise', 'Experience', 'Skills'].map(item => {
                             let Icon = FileText;
                             let color = 'text-[#569cd6]'; // default ts blue
                             let ext = '.md';
                             
                             if(item === 'Projects') { Icon = Braces; color='text-[#e67e22]'; ext='.cs'; }
-                            if(item === 'Services') { Icon = Component; color='text-[#2ecc71]'; ext='.cs'; }
+                            if(item === 'Expertise') { Icon = Component; color='text-[#2ecc71]'; ext='.cs'; }
                             if(item === 'Experience') { Icon = GitGraph; color='text-[#f1c40f]'; ext='.git'; }
                             if(item === 'Skills') { Icon = Hash; color='text-[#e74c3c]'; ext='.json'; }
                             
@@ -246,7 +253,7 @@ function App() {
            {openTabs.map(tab => {
                let ext = '.md';
                if(tab === 'Projects') ext='.cs';
-               if(tab === 'Services') ext='.cs';
+               if(tab === 'Expertise') ext='.cs';
                if(tab === 'Experience') ext='.git';
                if(tab === 'Skills') ext='.json';
 
@@ -258,8 +265,9 @@ function App() {
                 >
                     <div className="flex items-center gap-1.5 truncate">
                         {tab === 'Profile' && <FileText size={14} className="text-[#569cd6] flex-shrink-0" />}
+                        {tab === 'Resume' && <FileText size={14} className="text-[#569cd6] flex-shrink-0" />}
                         {tab === 'Projects' && <Braces size={14} className="text-[#e67e22] flex-shrink-0" />}
-                        {tab === 'Services' && <Component size={14} className="text-[#2ecc71] flex-shrink-0" />}
+                        {tab === 'Expertise' && <Component size={14} className="text-[#2ecc71] flex-shrink-0" />}
                         {tab === 'Experience' && <GitGraph size={14} className="text-[#f1c40f] flex-shrink-0" />}
                         {tab === 'Skills' && <Hash size={14} className="text-[#e74c3c] flex-shrink-0" />}
                         <span className="truncate">{tab}{ext}</span>
@@ -324,8 +332,7 @@ function App() {
                                         </h2>
                                         
                                         <p className="text-[#a1a1aa] leading-7 mb-4 max-w-2xl text-sm md:text-base">
-                                            Passionate .NET Developer specialized in building robust, scalable APIs and backend systems.
-                                            Currently working as a Back-End Developer at Xfuse, and previously led backend initiatives at Sohag University's Smart Team.
+                                            {PERSONAL_INFO.summary}
                                             Expert in <span className="text-[#dcdcaa]">Clean Architecture</span>, <span className="text-[#ce9178]">SQL Optimization</span>, and <span className="text-[#569cd6]">Problem Solving</span>.
                                         </p>
 
@@ -385,31 +392,190 @@ function App() {
                         </motion.div>
                     )}
 
+                    {/* RESUME TAB (ATS STYLE - UPDATED TO MATCH PDF) */}
+                    {activeTab === 'Resume' && (
+                        <motion.div initial={{opacity:0}} animate={{opacity:1}} className="max-w-4xl mx-auto bg-white text-[#1a1a1a] rounded-sm p-8 md:p-12 shadow-2xl font-serif min-h-[1100px]">
+                            {/* Header */}
+                            <div className="text-center border-b-2 border-black pb-4 mb-6">
+                                <h1 className="text-3xl font-bold uppercase tracking-wide text-black mb-1">{PERSONAL_INFO.name}</h1>
+                                <div className="text-lg font-bold text-[#333] mb-2">{PERSONAL_INFO.title}</div>
+                                <div className="flex flex-wrap justify-center gap-3 text-sm font-sans">
+                                    <span>{PERSONAL_INFO.location}</span> | 
+                                    <a href={PERSONAL_INFO.socials.email} className="hover:underline">{PERSONAL_INFO.email.replace('mailto:', '')}</a> | 
+                                    <span>{PERSONAL_INFO.phone}</span> | 
+                                    <a href={PERSONAL_INFO.socials.linkedin} className="hover:underline text-blue-700">LinkedIn</a> |
+                                    <a href={PERSONAL_INFO.socials.github} className="hover:underline text-blue-700">GitHub</a>
+                                </div>
+                            </div>
+
+                            {/* Professional Summary */}
+                            <div className="mb-6">
+                                <h3 className="text-md font-bold uppercase border-b border-[#333] mb-2 font-sans tracking-wide">Professional Summary</h3>
+                                <p className="text-sm leading-relaxed text-justify">
+                                    {PERSONAL_INFO.summary}
+                                </p>
+                            </div>
+
+                            {/* Education (Degrees Only) */}
+                            <div className="mb-6">
+                                <h3 className="text-md font-bold uppercase border-b border-[#333] mb-3 font-sans tracking-wide">Education</h3>
+                                {EDUCATION.map((edu, i) => (
+                                    <div key={i} className="mb-2">
+                                        <div className="flex justify-between font-bold text-sm">
+                                            <span>{edu.role}</span>
+                                            <span>{edu.period}</span>
+                                        </div>
+                                        <div className="text-sm italic">{edu.company}</div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Work Experience */}
+                            <div className="mb-6">
+                                <h3 className="text-md font-bold uppercase border-b border-[#333] mb-3 font-sans tracking-wide">Work Experience</h3>
+                                {WORK_EXPERIENCE.map((work, i) => (
+                                    <div key={i} className="mb-4">
+                                        <div className="flex justify-between font-bold text-sm">
+                                            <span>{work.role}</span>
+                                            <span>{work.period}</span>
+                                        </div>
+                                        <div className="text-sm font-semibold mb-1 italic">{work.company}</div>
+                                        <ul className="list-disc list-outside ml-4 text-sm leading-snug space-y-1">
+                                            {work.description?.map((desc, j) => (
+                                                <li key={j}>{desc}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Technical Projects (New Section per PDF) */}
+                            <div className="mb-6">
+                                <h3 className="text-md font-bold uppercase border-b border-[#333] mb-3 font-sans tracking-wide">Technical Projects</h3>
+                                {PROJECTS.slice(0, 4).map((proj, i) => (
+                                    <div key={i} className="mb-4">
+                                        <div className="flex justify-between font-bold text-sm">
+                                            <span>{proj.title}</span>
+                                            <span>{proj.period}</span>
+                                        </div>
+                                        <ul className="list-disc list-outside ml-4 text-sm leading-snug space-y-1 mt-1">
+                                            <li className="text-justify">{proj.description}</li>
+                                            <li>
+                                                <span className="font-bold">Key Tech:</span> {proj.techStack.join(', ')}.
+                                            </li>
+                                            {proj.link && (
+                                                <li>
+                                                    <a href={proj.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                                                        {proj.link.includes('github.com') ? 'View Project on GitHub' : 'Live Preview'}
+                                                    </a>
+                                                </li>
+                                            )}
+                                        </ul>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Certifications */}
+                            <div className="mb-6">
+                                <h3 className="text-md font-bold uppercase border-b border-[#333] mb-3 font-sans tracking-wide">Professional Certifications</h3>
+                                {CERTIFICATIONS.map((cert, i) => (
+                                    <div key={i} className="mb-2 flex justify-between text-sm">
+                                        <div>
+                                            <span className="font-bold">▪ {cert.role}</span> | {cert.company}
+                                        </div>
+                                        <span className="italic">{cert.period}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                             {/* Volunteering / Awards */}
+                             <div className="mb-6">
+                                <h3 className="text-md font-bold uppercase border-b border-[#333] mb-3 font-sans tracking-wide">Training, Volunteering & Achievements</h3>
+                                <div className="mb-2 font-bold text-sm">Volunteering Experience</div>
+                                {VOLUNTEERING.map((vol, i) => (
+                                    <div key={i} className="mb-3">
+                                        <div className="flex justify-between text-sm">
+                                            <span>▪ <span className="font-bold">{vol.role}</span> at {vol.company}</span>
+                                            <span className="italic">{vol.period}</span>
+                                        </div>
+                                        <ul className="list-disc list-outside ml-4 text-sm leading-snug mt-1">
+                                            {vol.description?.map((desc, j) => (
+                                                <li key={j}>{desc}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                ))}
+                                <div className="mb-2 font-bold text-sm mt-3">Training & Awards</div>
+                                {ACHIEVEMENTS.map((ach, i) => (
+                                    <div key={i} className="flex justify-between text-sm mt-1">
+                                        <span>▪ {ach.role} | {ach.company}</span>
+                                        <span className="italic">{ach.period}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Skills */}
+                            <div className="mb-6">
+                                <h3 className="text-md font-bold uppercase border-b border-[#333] mb-3 font-sans tracking-wide">Skills</h3>
+                                <div className="grid grid-cols-1 gap-1 text-sm">
+                                    {SKILLS.map((cat, i) => (
+                                        <div key={i} className="flex">
+                                            <span className="font-bold w-32 shrink-0">▪ {cat.name}:</span>
+                                            <span>{cat.skills.join(', ')}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Languages */}
+                            <div>
+                                <h3 className="text-md font-bold uppercase border-b border-[#333] mb-3 font-sans tracking-wide">Languages</h3>
+                                <div className="flex flex-col gap-1 text-sm">
+                                    {LANGUAGES.map((lang, i) => (
+                                        <div key={i}>
+                                            <span className="font-bold">▪ {lang.language}:</span> {lang.level}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+
                     {/* PROJECTS TAB */}
                     {activeTab === 'Projects' && (
                         <div className="max-w-7xl mx-auto pb-8">
                             <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                                <Braces className="text-[#e67e22]" /> Projects <span className="text-sm font-normal text-[#858585] font-mono">({filteredProjects.length})</span>
+                                <Braces className="text-[#e67e22]" /> Projects <span className="text-sm font-normal text-[#858585] font-mono">({commercialProjects.length})</span>
                             </h2>
-                            {filteredProjects.length === 0 ? (
+                            {commercialProjects.length === 0 ? (
                                 <div className="text-[#858585] italic">No projects found matching "{searchQuery}"</div>
                             ) : (
-                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                                    {filteredProjects.map((project) => (
-                                        <div key={project.title} className="h-[400px]">
-                                            <ProjectCard project={project} onClick={() => setSelectedProject(project)} />
+                                <div className="space-y-12">
+                                    {/* SECTION 1: COMMERCIAL / ENTERPRISE (Major Projects) */}
+                                    {commercialProjects.length > 0 && (
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-4 text-[#cccccc] text-sm font-bold uppercase tracking-wider">
+                                                <Briefcase size={16} className="text-[#38bdf8]"/> Commercial & Enterprise Work
+                                            </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                                                {commercialProjects.map((project) => (
+                                                    <div key={project.title} className="h-[400px]">
+                                                        <ProjectCard project={project} onClick={() => setSelectedProject(project)} />
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
-                                    ))}
+                                    )}
                                 </div>
                             )}
                         </div>
                     )}
 
-                    {/* SERVICES TAB */}
-                    {activeTab === 'Services' && (
+                    {/* SERVICES / EXPERTISE TAB */}
+                    {activeTab === 'Expertise' && (
                         <div className="max-w-6xl mx-auto pb-8">
                             <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
-                                <Component className="text-[#2ecc71]" /> Services & Capabilities
+                                <Component className="text-[#2ecc71]" /> Technical Expertise & What I Bring
                             </h2>
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -447,7 +613,7 @@ function App() {
                         </div>
                     )}
 
-                    {/* EXPERIENCE TAB (Git Graph) */}
+                    {/* EXPERIENCE TAB (Git Graph - Visual Timeline) */}
                     {activeTab === 'Experience' && (
                         <div className="max-w-4xl mx-auto pb-8">
                             <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
